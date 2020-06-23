@@ -27,9 +27,9 @@ public class LMAXAgent implements Agent {
     @Override
     public int doWork() throws Exception {
         pollCount = 0;
-        for (int i = 0; i < 100; i++) {
+        //for (int i = 0; i < 100; i++) { // what is the importance of this loop ?
             poller.poll(handler);
-        }
+        //}
         return pollCount;
     }
 

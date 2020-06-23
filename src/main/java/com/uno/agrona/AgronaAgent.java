@@ -5,7 +5,6 @@ package com.uno.agrona;
 
 import org.agrona.MutableDirectBuffer;
 import org.agrona.concurrent.Agent;
-import org.agrona.concurrent.MessageHandler;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.ringbuffer.OneToOneRingBuffer;
 import org.agrona.concurrent.ringbuffer.RingBuffer;
