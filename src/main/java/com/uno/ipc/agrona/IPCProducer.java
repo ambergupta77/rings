@@ -11,28 +11,21 @@ import java.nio.MappedByteBuffer;
 import static org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENGTH;
 
 public class IPCProducer {
-    public static final int SIZE = 2 * 8 * 1024;
-    public static final int  MY_EVENT_MSG_ID = 99;
-    public static final int  LENGTH = 32;
-    public static final int SIZE_OF_INT = 4;
-    public static final int SIZE_OF_LONG = 8;
-    private int  count = 0;
-    public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("main called...");
-        //fileTest();
-        IPCProducer producer = new IPCProducer();
-        producer.init();
+    private static final int SIZE = 2 * 8 * 1024;
+    private static final int  MY_EVENT_MSG_ID = 99;
+    private static final int  LENGTH = 32;
+    private static final int SIZE_OF_INT = 4;
+    private static final int SIZE_OF_LONG = 8;
+    private static int  count = 0;
 
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println("IPCProducer ...");
+        init();
     }
 
-    private void init() throws InterruptedException {
-        File file = new File("/tmp/agrona/shared-file.map");
+    private static  void init() throws InterruptedException {
+        File file = new File(Conf.FILE_NAME);
         IoUtil.deleteIfExists(file);
-        /**
-         * private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect((16 * 1024) + TRAILER_LENGTH);
-         *     private final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(byteBuffer);
-         *     private final RingBuffer ringBuffer = new OneToOneRingBuffer(unsafeBuffer);
-         */
 
         MappedByteBuffer mappedByteBuffer = IoUtil.mapNewFile(file, SIZE + TRAILER_LENGTH);
         UnsafeBuffer unsafeBuffer = new UnsafeBuffer(mappedByteBuffer);
@@ -49,8 +42,8 @@ public class IPCProducer {
                 buffer.putInt(index, count);
                 buffer.putLong(index + SIZE_OF_INT, count * 100);
                 buffer.putStringAscii(index + SIZE_OF_INT + SIZE_OF_LONG, "SweetMsg:" + count);
+                System.out.println("Written msg no." + count);
                 count++;
-                System.out.println("Written something");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -60,10 +53,7 @@ public class IPCProducer {
                 }
             }
         }) ;
-
         thread.start();
-
-
     }
 
     private static void fileTest() throws IOException {
@@ -73,5 +63,4 @@ public class IPCProducer {
             System.out.println("line: " + line);
         }
     }
-
 }

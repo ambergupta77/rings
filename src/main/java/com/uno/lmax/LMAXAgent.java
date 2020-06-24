@@ -1,6 +1,5 @@
 package com.uno.lmax;
 
-import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.EventPoller;
 import com.lmax.disruptor.RingBuffer;
 import org.agrona.concurrent.Agent;
@@ -11,8 +10,10 @@ import org.agrona.concurrent.Agent;
  */
 public class LMAXAgent implements Agent {
     private int pollCount = 0;
-
-    private final RingBuffer<MyEvent> ringBuffer = RingBuffer.createSingleProducer(LmaxEventFactory.FACTORY, 1024, new BusySpinWaitStrategy());
+    private RingBuffer<MyEvent> ringBuffer;
+    public LMAXAgent(RingBuffer<MyEvent> ringBuffer) {
+        this.ringBuffer = ringBuffer;
+    }
     private final EventPoller poller = ringBuffer.newPoller();
 
     private final EventPoller.Handler handler = new EventPoller.Handler() {
@@ -36,9 +37,5 @@ public class LMAXAgent implements Agent {
     @Override
     public String roleName() {
         return null;
-    }
-
-    public RingBuffer<MyEvent> getRingBuffer() {
-        return ringBuffer;
     }
 }

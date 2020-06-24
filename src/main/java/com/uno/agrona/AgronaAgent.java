@@ -15,9 +15,11 @@ import static org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENG
 
 public class AgronaAgent implements Agent {
     public static final int  MY_EVENT_MSG_ID = 99;
-    private final ByteBuffer byteBuffer = ByteBuffer.allocateDirect((16 * 1024) + TRAILER_LENGTH);
-    private final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(byteBuffer);
-    private final RingBuffer ringBuffer = new OneToOneRingBuffer(unsafeBuffer);
+    private RingBuffer ringBuffer;
+
+    public AgronaAgent(RingBuffer ringBuffer) {
+        this.ringBuffer = ringBuffer;
+    }
 
 
     @Override
@@ -27,7 +29,7 @@ public class AgronaAgent implements Agent {
                     int anInt = mutableDirectBuffer.getInt(index);
                     long aLong = mutableDirectBuffer.getLong(index + 4);
                     String stringAscii = mutableDirectBuffer.getStringAscii(index + 4 + 8);
-                    System.out.println("Messages has Int: " + anInt + " Long:" + aLong + " String: " + stringAscii);
+                    System.out.println("Received messages with Int: " + anInt + " Long:" + aLong + " String: " + stringAscii);
             }
         });
         /*return  ringBuffer.read(new MessageHandler() {
@@ -42,13 +44,8 @@ public class AgronaAgent implements Agent {
             }
         });*/
     }
-
     @Override
     public String roleName() {
         return null;
-    }
-
-    public RingBuffer getRingBuffer() {
-        return ringBuffer;
     }
 }

@@ -5,7 +5,6 @@ import org.agrona.concurrent.Agent;
 import org.agrona.concurrent.ringbuffer.OneToOneRingBuffer;
 
 public class IPCConsumerAgent implements Agent {
-
     private OneToOneRingBuffer ringBuffer;
     public static final int  MY_EVENT_MSG_ID = 99;
 

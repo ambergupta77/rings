@@ -10,14 +10,10 @@ import org.agrona.concurrent.ringbuffer.OneToOneRingBuffer;
 import java.io.File;
 import java.nio.MappedByteBuffer;
 
-import static org.agrona.concurrent.ringbuffer.RingBufferDescriptor.TRAILER_LENGTH;
-
 public class IPCConsumer {
-    public static final int SIZE = 2 * 8 * 1024;
-
     public static void main(String[] args) {
-        System.out.println("Consumer");
-        File file = new File("/tmp/agrona/shared-file.map");
+        System.out.println("IPCConsumer");
+        File file = new File(Conf.FILE_NAME);
 
         MappedByteBuffer mappedByteBuffer = IoUtil.mapExistingFile(file, "Ring buffer file");
         UnsafeBuffer unsafeBuffer = new UnsafeBuffer(mappedByteBuffer);
